@@ -30,6 +30,32 @@ class Database {
       `, tableName);
   }
 
+  // method to retrieve all courses
+  returnCourses() {
+    this.log(`Getting list of courses...`);
+    return this.context
+      .retrieve(`
+        SELECT title, Users.firstName || " " || Users.lastName As user
+        FROM Courses
+        INNER JOIN Users
+        ON Courses.userId = Users.id
+      `);
+  }
+
+  // method to retrieve single course
+  returnSingleCourse(course) {
+    this.log(`Getting single course...`);
+    this.log(course.id  + '-- from courses database.js');
+    return this.context
+      .retrieveSingle(`
+        SELECT title, Users.firstName || " " || Users.lastName As user
+        FROM Courses 
+        INNER JOIN Users
+        ON Courses.userId = Users.id
+        WHERE Courses.id = ?
+      `, course.id);  
+    }
+
   createUser(user) {
     return this.context
       .execute(`

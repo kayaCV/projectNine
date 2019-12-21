@@ -3,6 +3,28 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const Sequelize = require('sequelize');
+const routes = require('./routes');
+// const { sequelize, models } = require('./db');
+// const { Person, Movie } = models;
+
+//////////////////////////////////////////////////////
+/// TESTING CONNECTION TO DB
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'movies.db'
+});
+
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('ESTA CANEKADU!');
+  } catch (error) {
+    console.error('Error connecting to the database: ', error);
+  }
+})();
+/// TESTING CONNECTION TO DB ^
+//////////////////////////////////////////////////////
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
@@ -21,6 +43,12 @@ app.get('/', (req, res) => {
     message: 'Welcome to the REST API project!',
   });
 });
+
+// expect request to come in as json
+app.use(express.json()); 
+
+// Add routes.
+app.use('/api', routes);
 
 // send 404 if no other route matched
 app.use((req, res) => {

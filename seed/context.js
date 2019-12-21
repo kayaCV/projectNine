@@ -55,7 +55,9 @@ class Context {
   }
 
   async retrieveSingle(text, ...params) {
+    // console.log(...params + '-- from param context.js')
     const data = await this.query(text, ...params);
+    // console.log(data + '---from data context');
     let record;
     if (data) {
       if (data.length === 1) {
