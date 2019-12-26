@@ -54,7 +54,58 @@ class Database {
         ON Courses.userId = Users.id
         WHERE Courses.id = ?
       `, course.id);  
-    }
+  }
+
+  // method to update a course
+  updateCourse(course) {
+    this.log(course.userId);
+    this.log("Updating course");
+    return this.context
+      .execute( `
+      UPDATE Courses
+      SET userId = ?, title = ?, description = ?, estimatedTime = ?, materialsNeeded = ?, updatedAt = datetime('now')
+      WHERE Courses.id = ?
+      `, 
+        course.userId,
+        course.title,
+        course.description,
+        course.estimatedTime,
+        course.materialsNeeded,
+        course.id
+        )
+  }
+
+  // method to delete a course
+  deleteCourse(course) {
+    return this.context
+      .execute(`
+      DELETE FROM Courses
+      WHERE id = ?
+      `,
+      course.id
+      )
+  }
+
+  // method to retrieve all users
+  allUsers() {
+    this.log(`Getting list of users...`);
+    return this.context
+      .retrieve(`
+      SELECT emailAddress, password
+      FROM Users
+      `
+    )
+  }
+
+  // method to return single user by email
+  singleUser(email) {
+    return this.context
+      .retrieveSingle(`
+        SELECT emailAddress
+        FROM Users 
+        WHERE Users.emailAddress = ?
+      `, email);  
+  }
 
   createUser(user) {
     return this.context
