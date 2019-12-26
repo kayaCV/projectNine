@@ -98,7 +98,6 @@ router.post('/users',[
     .custom( async (value, {req}) => {
         const user = await database.singleUser(value);
         if(user) {
-            console.log('hay!!!');
             throw new Error('Email address already in use!');
         }
         return true;
@@ -128,7 +127,7 @@ router.post('/users',[
             password: bcryptjs.hashSync(req.body.password)
         });
 ;
-        // Set the status to 201 Created and end the response.
+        // Set the status to 201 Created and end the response. 
         res.status(201).end();
 
     } catch(error) {
@@ -182,8 +181,12 @@ router.post('/courses', [
             materialsNeeded: req.body.materialsNeeded
         });
 
-        // Set the status to 201 Created and end the response.
+        const courseId = await database.lastCourseId();   
+
+        // set the Location header to the URI for the course,
+        res.location('/courses/' + courseId.id);
         res.status(201).end();
+        
     } catch(error) {
         res.json({message: error.message});
     }

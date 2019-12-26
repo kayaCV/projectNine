@@ -56,6 +56,15 @@ class Database {
       `, course.id);  
   }
 
+  // method to return last entry id
+  lastCourseId() {
+    this.log("retrieving last entry id");
+    return this.context
+      .retrieveSingle(`   
+      SELECT last_insert_rowid() AS id;
+      `);
+  }
+
   // method to update a course
   updateCourse(course) {
     this.log(course.userId);
@@ -134,6 +143,7 @@ class Database {
       course.description,
       course.estimatedTime,
       course.materialsNeeded);
+    
   }
 
   async hashUserPasswords(users) {
