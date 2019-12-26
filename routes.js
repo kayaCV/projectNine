@@ -126,6 +126,8 @@ router.post('/users',[
             emailAddress: req.body.emailAddress,
             password: bcryptjs.hashSync(req.body.password)
         });
+
+        res.location('/');
 ;
         // Set the status to 201 Created and end the response. 
         res.status(201).end();
